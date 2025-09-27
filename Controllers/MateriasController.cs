@@ -1,11 +1,13 @@
 using LAB5_RodrigoApaza.DTOs;
 using LAB5_RodrigoApaza.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LAB5_RodrigoApaza.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+
 public class MateriasController : ControllerBase
 {
     private readonly IMateriaService _materiaService;
@@ -16,6 +18,7 @@ public class MateriasController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "ProfesorOnly")]
     public async Task<IActionResult> GetAll()
     {
         var materias = await _materiaService.GetAllMateriasAsync();
@@ -23,6 +26,7 @@ public class MateriasController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Policy = "ProfesorOnly")]
     public async Task<IActionResult> GetById(int id)
     {
         var materia = await _materiaService.GetMateriaByIdAsync(id);
@@ -31,6 +35,7 @@ public class MateriasController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> Create(CrearMateriaDto dto)
     {
         var creada = await _materiaService.CreateMateriaAsync(dto);
@@ -38,6 +43,7 @@ public class MateriasController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> Update(int id, CrearMateriaDto dto)
     {
         var result = await _materiaService.UpdateMateriaAsync(id, dto);
@@ -46,6 +52,7 @@ public class MateriasController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> Delete(int id)
     {
         var result = await _materiaService.DeleteMateriaAsync(id);

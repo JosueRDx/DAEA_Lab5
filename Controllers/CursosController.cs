@@ -1,5 +1,6 @@
 using LAB5_RodrigoApaza.DTOs;
 using LAB5_RodrigoApaza.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LAB5_RodrigoApaza.Controllers;
@@ -16,6 +17,7 @@ public class CursosController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "ProfesorOnly")]
     public async Task<IActionResult> GetAll()
     {
         var cursos = await _cursoService.GetAllCursosAsync();
@@ -23,6 +25,7 @@ public class CursosController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Policy = "ProfesorOnly")]
     public async Task<IActionResult> GetById(int id)
     {
         var curso = await _cursoService.GetCursoByIdAsync(id);
@@ -31,6 +34,7 @@ public class CursosController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> Create(CrearCursoDto dto)
     {
         var creado = await _cursoService.CreateCursoAsync(dto);
@@ -38,6 +42,7 @@ public class CursosController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> Update(int id, CrearCursoDto dto)
     {
         var result = await _cursoService.UpdateCursoAsync(id, dto);
@@ -46,6 +51,7 @@ public class CursosController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> Delete(int id)
     {
         var result = await _cursoService.DeleteCursoAsync(id);

@@ -29,7 +29,12 @@ public partial class AcademicDbContext : DbContext
     public virtual DbSet<Matricula> Matriculas { get; set; }
 
     public virtual DbSet<Profesore> Profesores { get; set; }
-    
+
+    public virtual DbSet<Usuario> Usuarios { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder.UseNpgsql("Name=DefaultConnection");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Asistencia>(entity =>
@@ -170,6 +175,26 @@ public partial class AcademicDbContext : DbContext
             entity.Property(e => e.Nombre)
                 .HasMaxLength(100)
                 .HasColumnName("nombre");
+        });
+
+        modelBuilder.Entity<Usuario>(entity =>
+        {
+            entity.HasKey(e => e.IdUsuario).HasName("usuarios_pkey");
+
+            entity.ToTable("usuarios");
+
+            entity.HasIndex(e => e.NombreUsuario, "usuarios_nombre_usuario_key").IsUnique();
+
+            entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
+            entity.Property(e => e.NombreUsuario)
+                .HasMaxLength(50)
+                .HasColumnName("nombre_usuario");
+            entity.Property(e => e.PasswordHash)
+                .HasMaxLength(255)
+                .HasColumnName("password_hash");
+            entity.Property(e => e.Rol)
+                .HasMaxLength(20)
+                .HasColumnName("rol");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -1,5 +1,6 @@
 using LAB5_RodrigoApaza.DTOs;
 using LAB5_RodrigoApaza.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LAB5_RodrigoApaza.Controllers;
@@ -16,6 +17,7 @@ public class MatriculasController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "ProfesorOnly")]
     public async Task<IActionResult> GetAll()
     {
         var lista = await _matriculaService.GetAllMatriculasAsync();
@@ -23,6 +25,7 @@ public class MatriculasController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Policy = "ProfesorOnly")]
     public async Task<IActionResult> GetById(int id)
     {
         var matricula = await _matriculaService.GetMatriculaByIdAsync(id);
@@ -31,6 +34,7 @@ public class MatriculasController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> Create(CrearMatriculaDto dto)
     {
         var creada = await _matriculaService.CrearMatriculaAsync(dto);
@@ -38,6 +42,7 @@ public class MatriculasController : ControllerBase
     }
     
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> Update(int id, CrearMatriculaDto dto)
     {
         var result = await _matriculaService.UpdateMatriculaAsync(id, dto);
@@ -50,6 +55,7 @@ public class MatriculasController : ControllerBase
 
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> Delete(int id)
     {
         var result = await _matriculaService.DeleteMatriculaAsync(id);

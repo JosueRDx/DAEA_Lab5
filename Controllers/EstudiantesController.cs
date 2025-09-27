@@ -1,5 +1,6 @@
 using LAB5_RodrigoApaza.DTOs;
 using LAB5_RodrigoApaza.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/[controller]")]
@@ -14,6 +15,7 @@ public class EstudiantesController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = "ProfesorOnly")]
     public async Task<IActionResult> GetAll()
     {
         var estudiantes = await _estudianteService.GetAllEstudiantesAsync();
@@ -21,6 +23,7 @@ public class EstudiantesController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Policy = "ProfesorOnly")]
     public async Task<IActionResult> GetById(int id)
     {
         var estudiante = await _estudianteService.GetEstudianteByIdAsync(id);
@@ -32,6 +35,7 @@ public class EstudiantesController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> Create(CreateEstudianteDto createEstudianteDto)
     {
         var estudiante = await _estudianteService.CreateEstudianteAsync(createEstudianteDto);
@@ -39,6 +43,7 @@ public class EstudiantesController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> Update(int id, CreateEstudianteDto updateEstudianteDto)
     {
         var result = await _estudianteService.UpdateEstudianteAsync(id, updateEstudianteDto);
@@ -50,6 +55,7 @@ public class EstudiantesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> Delete(int id)
     {
         var result = await _estudianteService.DeleteEstudianteAsync(id);

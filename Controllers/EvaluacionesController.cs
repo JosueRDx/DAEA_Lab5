@@ -1,11 +1,13 @@
 using LAB5_RodrigoApaza.DTOs;
 using LAB5_RodrigoApaza.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LAB5_RodrigoApaza.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Policy = "AdminOnly")]
 public class EvaluacionesController : ControllerBase
 {
     private readonly IEvaluacionService _service;
